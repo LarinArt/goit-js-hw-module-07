@@ -4,38 +4,33 @@ import { galleryItems } from './gallery-items.js';
 const gallery = document.querySelector('.gallery');
 let instance = null;
 
-function createGallery(galleryItems) {
-    return galleryItems.map(({ preview, original, description }) => {
-        return `
-    <div class="gallery__item">
-        <a class="gallery__link"
-            href="${original}">
-            <img
-            class="gallery__image"
-            src="${preview}"
-            data-source="${original}"
-            alt="${description}"
-            />
-        </a>
-    </div>
-    `;
-    }).join('');
-};    
+const createGallery = (galleryItems) =>
+    galleryItems.map(({ preview, original, description }) =>
+        `<div class="gallery__item">
+            <a class="gallery__link"
+                href="${original}">
+                <img
+                class="gallery__image"
+                src="${preview}"
+                data-source="${original}"
+                alt="${description}"
+                />
+            </a>
+        </div>`).join('');   
 
 gallery.insertAdjacentHTML('beforeend', createGallery(galleryItems));
 
 function onImgClick(e) {
     e.preventDefault(); 
-    if (e.target.nodeName !== 'IMG') {
-        return;
-    }
 
-    instance = basicLightbox.create(`
-    <img
-    class="gallery__image"
-    src = "${e.target.dataset.source}"
-    />
-    `,
+    if (e.target.nodeName !== 'IMG') 
+        return;
+    
+    instance = basicLightbox.create(
+        `<img
+        class="gallery__image"
+        src = "${e.target.dataset.source}"
+        />`,
     {
     onShow: () => {
         window.addEventListener('keydown', onEscPress);
